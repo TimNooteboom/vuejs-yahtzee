@@ -1,11 +1,7 @@
 <template>
   <div class="container">
     <div class="dice-wrapper">
-      <img id="die-1" />
-      <img id="die-2" />
-      <img id="die-3" />
-      <img id="die-4" />
-      <img id="die-5" />
+      <Die />
     </div>
     <p id="total"></p>
     <button @click="roll">Roll the dice</button>
@@ -14,30 +10,45 @@
 
 <script setup>
   import { ref, reactive } from 'vue'
+  import Die from './Die.vue'
 
-  const images = reactive(['one.svg', 'two.svg', 'three.svg', 'four.svg', 'five.svg', 'six.svg'])
+  const diceFace = reactive([
+    { name: 'dieOneValue', img: 'one.svg'}, 
+    { name: 'dieTwoValue', img: 'two.svg' }, 
+    { name: 'dieThreeValue', img: 'three.svg' }, 
+    { name: 'dieFourValue', img: 'four.svg' }, 
+    { name: 'dieFiveValue', img: 'five.svg' }, 
+    { name: 'dieSixValue', img: 'six.svg' }
+  ])
 
   const rollDice = () => {
-    let dieOneValue = Math.floor(Math.random()*6)
-      let dieTwoValue = Math.floor(Math.random()*6)
-      let dieThreeValue = Math.floor(Math.random()*6)
-      let dieFourValue = Math.floor(Math.random()*6)
-      let dieFiveValue = Math.floor(Math.random()*6)
+    // let dieOneValue = Math.floor(Math.random()*6)
+    // let dieTwoValue = Math.floor(Math.random()*6)
+    // let dieThreeValue = Math.floor(Math.random()*6)
+    // let dieFourValue = Math.floor(Math.random()*6)
+    // let dieFiveValue = Math.floor(Math.random()*6)
 
-      document.querySelector('#die-1').setAttribute('src', '/src/assets/dice/' + images[dieOneValue])
-      document.querySelector('#die-2').setAttribute('src', '/src/assets/dice/' + images[dieTwoValue])
-      document.querySelector('#die-3').setAttribute('src', '/src/assets/dice/' + images[dieThreeValue])
-      document.querySelector('#die-4').setAttribute('src', '/src/assets/dice/' + images[dieFourValue])
-      document.querySelector('#die-5').setAttribute('src', '/src/assets/dice/' + images[dieFiveValue])
-      document.querySelector('#total').innerHTML = 'The total is ' + ((dieOneValue+1) + (dieTwoValue+1) + (dieThreeValue+1) + (dieFourValue+1) + (dieFiveValue+1)) 
+    // document.querySelector('#die-1').setAttribute('src', '/src/assets/dice/' + diceFace[dieOneValue])
+    // document.querySelector('#die-2').setAttribute('src', '/src/assets/dice/' + diceFace[dieTwoValue])
+    // document.querySelector('#die-3').setAttribute('src', '/src/assets/dice/' + diceFace[dieThreeValue])
+    // document.querySelector('#die-4').setAttribute('src', '/src/assets/dice/' + diceFace[dieFourValue])
+    // document.querySelector('#die-5').setAttribute('src', '/src/assets/dice/' + diceFace[dieFiveValue])
+
+    diceFace.forEach((die) => {
+      die.val = Math.ceil(Math.random()*6)
+    })
+
+    console.log(diceFace)
+
+    // document.querySelector('#total').innerHTML = 'The total is ' + ((dieOneValue+1) + (dieTwoValue+1) + (dieThreeValue+1) + (dieFourValue+1) + (dieFiveValue+1)) 
   }
   const roll = () => {
     const word = ''
     const image = ''
     const value = 0
-    images.forEach((img, i) => {
-      console.log(i+1, img.split('.')[0], img)
-    })
+    // diceFace.forEach((img, i) => {
+    //   console.log(i+1, img.img.split('.')[0], img)
+    // })
 
     let dice = document.querySelectorAll(".dice-wrapper img")
     dice.forEach((die) => {
@@ -52,7 +63,7 @@
     }, 1000)
 
   }
-  roll()
+  // roll()
 </script>
 
 <style>
