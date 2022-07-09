@@ -1,5 +1,5 @@
 <template>
-  <Yahtzee msg="Let's build a Yahtzee game, yo!" />
+  <Yahtzee />
 </template>
 
 <script setup>

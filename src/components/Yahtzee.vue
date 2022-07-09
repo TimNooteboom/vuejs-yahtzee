@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="dice-wrapper">
-      <Die />
+      <Dice :dice = "diceFace" />
     </div>
     <p id="total"></p>
     <button @click="roll">Roll the dice</button>
@@ -10,45 +10,21 @@
 
 <script setup>
   import { ref, reactive } from 'vue'
-  import Die from './Die.vue'
+  import Dice from './Dice.vue'
 
-  const diceFace = reactive([
-    { name: 'dieOneValue', img: 'one.svg'}, 
-    { name: 'dieTwoValue', img: 'two.svg' }, 
-    { name: 'dieThreeValue', img: 'three.svg' }, 
-    { name: 'dieFourValue', img: 'four.svg' }, 
-    { name: 'dieFiveValue', img: 'five.svg' }, 
-    { name: 'dieSixValue', img: 'six.svg' }
-  ])
+  let diceFace = ref([])
 
   const rollDice = () => {
-    // let dieOneValue = Math.floor(Math.random()*6)
-    // let dieTwoValue = Math.floor(Math.random()*6)
-    // let dieThreeValue = Math.floor(Math.random()*6)
-    // let dieFourValue = Math.floor(Math.random()*6)
-    // let dieFiveValue = Math.floor(Math.random()*6)
 
-    // document.querySelector('#die-1').setAttribute('src', '/src/assets/dice/' + diceFace[dieOneValue])
-    // document.querySelector('#die-2').setAttribute('src', '/src/assets/dice/' + diceFace[dieTwoValue])
-    // document.querySelector('#die-3').setAttribute('src', '/src/assets/dice/' + diceFace[dieThreeValue])
-    // document.querySelector('#die-4').setAttribute('src', '/src/assets/dice/' + diceFace[dieFourValue])
-    // document.querySelector('#die-5').setAttribute('src', '/src/assets/dice/' + diceFace[dieFiveValue])
-
-    diceFace.forEach((die) => {
-      die.val = Math.ceil(Math.random()*6)
+    diceFace.value = [...Array(5)].map(() => {
+      return Math.ceil(Math.random()*6)
     })
 
-    console.log(diceFace)
+    console.log(diceFace.value)
 
     // document.querySelector('#total').innerHTML = 'The total is ' + ((dieOneValue+1) + (dieTwoValue+1) + (dieThreeValue+1) + (dieFourValue+1) + (dieFiveValue+1)) 
   }
   const roll = () => {
-    const word = ''
-    const image = ''
-    const value = 0
-    // diceFace.forEach((img, i) => {
-    //   console.log(i+1, img.img.split('.')[0], img)
-    // })
 
     let dice = document.querySelectorAll(".dice-wrapper img")
     dice.forEach((die) => {
@@ -63,7 +39,6 @@
     }, 1000)
 
   }
-  // roll()
 </script>
 
 <style>
@@ -84,13 +59,15 @@
     border-radius: 8px;
   }
   .dice-wrapper {
-    width: 60%;
+    width: 63%;
     /* display: flex; */
     /* justify-content: space-around; */
   }
   .dice-wrapper img {
     height: 100px;
-    color: #e92e3d;
+  }
+  .dice-wrapper img.select {
+    filter: opacity(0.5)
   }
   p {
     font-size: 16px;
