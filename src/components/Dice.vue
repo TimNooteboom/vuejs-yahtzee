@@ -1,13 +1,15 @@
 <template>
   <span v-for="(die, index) in props.dice" :key="`die-${index}`" :id="`die-${index+1}`">
-    <Die :die=die-1 />
+    <img 
+      @click="selectDice(index)" 
+      :class="{ select: selected.includes(index) }"  
+      :src=`./src/assets/dice/${dice[die-1]}`  
+    /> 
   </span>
 </template>
 
 <script setup>
   import { ref } from 'vue'
-  import Die from './Die.vue'
-  
 
   const props = defineProps({
     dice: {
@@ -16,8 +18,14 @@
     }
   })
 
+  const dice = ref(['one.svg', 'two.svg', 'three.svg', 'four.svg', 'five.svg', 'six.svg'])
+  const selected = ref([])
   const selectDice = (index) => {
-    console.log(index)
+    if(selected.value.includes(index)) {
+      selected.value.splice(selected.value.indexOf(index), 1)
+    } else {
+      selected.value.push(index)
+    }
   }
 </script>
 
