@@ -1,10 +1,55 @@
 <template>
   <div class="container">
+    <div id="board">
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/one.svg' 
+        />
+        <input class="ones" />
+      </span>
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/two.svg' 
+        />
+        <input class="twos" />
+      </span>
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/three.svg' 
+        />
+        <input class="threes" />
+      </span>
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/four.svg' 
+        />
+        <input class="fours" />
+      </span>
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/five.svg' 
+        />
+        <input class="fives" />
+      </span>
+      <span class="section">
+        <img 
+          draggable="false"
+          src='../assets/dice/six.svg' 
+        />
+        <input class="sixes" />
+      </span>
+    </div>
     <div class="dice-wrapper">
       <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" />
     </div>
     <p id="total"></p>
     <button :class="{disabled: disabled}" @click="roll">Roll the dice</button>
+    <button :class="{disabled: !disabled}" @click="roll">Play</button>
   </div>
 </template>
 
@@ -64,11 +109,11 @@
     box-sizing: border-box;
   }
   .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 500px;
+    /* display: flex; */
     font-family: "Poppins", sans-serif;
     padding: 20px;
+    margin: 20px auto;
     background-color: #fff;
     border: 1px solid;
     box-shadow: 0 5px 35px rgb(50,50,50,0.15);
@@ -77,13 +122,29 @@
   .disabled {
     filter: opacity(0.5)
   }
+  #board {
+    width: 100px;
+    margin-bottom: 20px;
+    flex-direction: column;
+  }
+  #board .section {
+    flex-direction: row;
+    width: 200px;
+  }
+  #board .section img {
+    height: 50px;
+  }
+  #board .section input {
+    height: 50px;
+    width: 50px;
+  }
   .dice-wrapper {
     width: 63%;
     /* display: flex; */
     /* justify-content: space-around; */
   }
   .dice-wrapper img {
-    height: 100px;
+    height: 50px;
   }
   .dice-wrapper img.select {
     filter: opacity(0.5)
@@ -100,6 +161,7 @@
     color: #fff;
     padding: 15px 0;
     width: 150px;
+    margin-right: 20px;
     letter-spacing: 1px;
     border-radius: 5px;
     text-transform: uppercase;
