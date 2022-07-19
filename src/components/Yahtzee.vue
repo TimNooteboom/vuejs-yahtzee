@@ -1,23 +1,30 @@
 <template>
   <div class="container">
     <div class="dice-wrapper">
-      <Dice @selected="selectedDice" :dice="diceFace" />
+      <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" />
     </div>
     <p id="total"></p>
-    <button :class="{disabled: rolls === 0}" @click="roll">Roll the dice</button>
+    <button :class="{disabled: disabled}" @click="roll">Roll the dice</button>
   </div>
 </template>
 
 <script setup>
-  import { ref, reactive } from 'vue'
+  import { ref, reactive, computed, watch } from 'vue'
   import Dice from './Dice.vue'
 
   let diceFace = ref([])
   let selected = ref([])
   let rolls = ref(3)
+  let disabled = ref(false)
+
+  // when we are out of rolls, send 'disabled' to the dice component
+  watch(rolls, (newValue) => {
+    if(newValue === 0) {
+      disabled.value = true
+    }
+  })
 
   const rollDice = () => {
-    
     [...Array(5)].map((el, index) => {
       if(!selected.value.includes(index)) {
         diceFace.value[index] = Math.ceil(Math.random()*6)
@@ -25,9 +32,8 @@
     })
 
     console.log('dice face: ', diceFace.value)
-
-    // document.querySelector('#total').innerHTML = 'The total is ' + ((dieOneValue+1) + (dieTwoValue+1) + (dieThreeValue+1) + (dieFourValue+1) + (dieFiveValue+1)) 
   }
+
   const roll = () => {
     if(rolls.value === 0) return
     let dice = document.querySelectorAll(".dice-wrapper img")
