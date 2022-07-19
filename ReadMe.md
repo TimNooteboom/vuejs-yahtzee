@@ -7,6 +7,7 @@ npm run dev
 Dice from here: https://www.youtube.com/watch?v=6CMfZkLntX8
 
 TODO:
+Show the roll number
 Build out the board
 Build out the logic
 Add Pinia

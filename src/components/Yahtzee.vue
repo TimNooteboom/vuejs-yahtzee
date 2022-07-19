@@ -6,50 +6,50 @@
           draggable="false"
           src='../assets/dice/one.svg' 
         />
-        <input class="ones" />
+        <input @click="input(1)" class="ones" v-model="values[0]" />
       </span>
       <span class="section">
         <img 
           draggable="false"
           src='../assets/dice/two.svg' 
         />
-        <input class="twos" />
+        <input @click=input(2) class="twos"  v-model="values[1]"/>
       </span>
       <span class="section">
         <img 
           draggable="false"
           src='../assets/dice/three.svg' 
         />
-        <input class="threes" />
+        <input @click=input(3) class="threes"  v-model="values[2]"/>
       </span>
       <span class="section">
         <img 
           draggable="false"
           src='../assets/dice/four.svg' 
         />
-        <input class="fours" />
+        <input @click=input(4) class="fours"  v-model="values[3]"/>
       </span>
       <span class="section">
         <img 
           draggable="false"
           src='../assets/dice/five.svg' 
         />
-        <input class="fives" />
+        <input @click=input(5) class="fives"  v-model="values[4]"/>
       </span>
       <span class="section">
         <img 
           draggable="false"
           src='../assets/dice/six.svg' 
         />
-        <input class="sixes" />
+        <input @click=input(6) class="sixes"  v-model="values[5]"/>
       </span>
     </div>
     <div class="dice-wrapper">
-      <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" />
+      <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" :reset="reset" />
     </div>
     <p id="total"></p>
     <button :class="{disabled: disabled}" @click="roll">Roll the dice</button>
-    <button :class="{disabled: !disabled}" @click="roll">Play</button>
+    <button :class="{disabled: rolls == 3 || !viewed}" @click="submit">Play</button>
   </div>
 </template>
 
@@ -58,9 +58,13 @@
   import Dice from './Dice.vue'
 
   let diceFace = ref([])
-  let selected = ref([])
+  let selectedCopy = ref([])
   let rolls = ref(3)
   let disabled = ref(false)
+  let viewed = ref(false)
+  let reset = ref(false)
+  let values = ref(['','','','','',''])
+  let currentValue = {}
 
   // when we are out of rolls, send 'disabled' to the dice component
   watch(rolls, (newValue) => {
@@ -69,9 +73,40 @@
     }
   })
 
+  const input = (index) => {
+    viewed.value = true
+    // filter out the diceFace array to only show the values that was clicked on, then add them up
+    const valueArr = diceFace.value.filter((el) => el === index)
+    let value = 0
+
+    if(valueArr.length) {
+      value = valueArr.reduce((a,b) => a + b)
+    }
+
+    currentValue = {
+      value: value,
+      index: index-1
+    }
+    
+    console.log(currentValue)
+  }
+
+  const submit = () => {
+    values.value[currentValue.index] = currentValue.value
+    if(!values.value.some((el) => el === '')) {
+      console.log('game over!!') // game is over. Reset Everything. Remove the dice from board
+    }
+
+    console.log(values.value)
+    rolls.value = 3
+    disabled.value = false
+    selectedCopy.value = []
+    reset.value = true
+  }
+
   const rollDice = () => {
     [...Array(5)].map((el, index) => {
-      if(!selected.value.includes(index)) {
+      if(!selectedCopy.value.includes(index)) {
         diceFace.value[index] = Math.ceil(Math.random()*6)
       }
     })
@@ -80,10 +115,12 @@
   }
 
   const roll = () => {
+    reset.value = false
+    viewed.value = false
     if(rolls.value === 0) return
     let dice = document.querySelectorAll(".dice-wrapper img")
     dice.forEach((die, index) => {
-      if(!selected.value.includes(index)) {
+      if(!selectedCopy.value.includes(index)) {
         die.classList.add('shake')
       }
     })
@@ -97,8 +134,8 @@
     rolls.value--
   }
   const selectedDice = (sel) => {
-    selected.value = [...sel]
-    console.log(selected.value)
+    selectedCopy.value = [...sel]
+    console.log(selectedCopy.value)
   }
 </script>
 
@@ -135,13 +172,16 @@
     height: 50px;
   }
   #board .section input {
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
+    padding: 5px;
+    font-size: 20px;
   }
   .dice-wrapper {
-    width: 63%;
-    /* display: flex; */
-    /* justify-content: space-around; */
+    width: 265px;
+    border: 2px solid;
+    height: 65px;
+    padding: 5px;
   }
   .dice-wrapper img {
     height: 50px;

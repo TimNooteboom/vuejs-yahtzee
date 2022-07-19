@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
   const emit = defineEmits(['selected'])
 
   const props = defineProps({
@@ -21,6 +21,16 @@
     disabled: {
       type: Boolean,
       default: false
+    },
+    reset: {
+      type: Boolean,
+      default: false
+    }
+  })
+
+  watch(() => props.reset, (newValue) => {
+    if(newValue === true) {
+      selected.value = []
     }
   })
 
