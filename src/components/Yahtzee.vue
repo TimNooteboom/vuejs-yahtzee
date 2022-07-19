@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <div class="dice-wrapper">
-      <Dice :dice = "diceFace" />
+      <Dice @selected="selectedDice" :dice="diceFace" />
     </div>
     <p id="total"></p>
-    <button @click="roll">Roll the dice</button>
+    <button :class="{disabled: rolls === 0}" @click="roll">Roll the dice</button>
   </div>
 </template>
 
@@ -13,22 +13,28 @@
   import Dice from './Dice.vue'
 
   let diceFace = ref([])
+  let selected = ref([])
+  let rolls = ref(3)
 
   const rollDice = () => {
-
-    diceFace.value = [...Array(5)].map(() => {
-      return Math.ceil(Math.random()*6)
+    
+    [...Array(5)].map((el, index) => {
+      if(!selected.value.includes(index)) {
+        diceFace.value[index] = Math.ceil(Math.random()*6)
+      }
     })
 
-    console.log(diceFace.value)
+    console.log('dice face: ', diceFace.value)
 
     // document.querySelector('#total').innerHTML = 'The total is ' + ((dieOneValue+1) + (dieTwoValue+1) + (dieThreeValue+1) + (dieFourValue+1) + (dieFiveValue+1)) 
   }
   const roll = () => {
-
+    if(rolls.value === 0) return
     let dice = document.querySelectorAll(".dice-wrapper img")
-    dice.forEach((die) => {
-      die.classList.add('shake')
+    dice.forEach((die, index) => {
+      if(!selected.value.includes(index)) {
+        die.classList.add('shake')
+      }
     })
 
     setTimeout(() => {
@@ -37,7 +43,11 @@
       })
       rollDice()
     }, 1000)
-
+    rolls.value--
+  }
+  const selectedDice = (sel) => {
+    selected.value = [...sel]
+    console.log(selected.value)
   }
 </script>
 
@@ -57,6 +67,9 @@
     border: 1px solid;
     box-shadow: 0 5px 35px rgb(50,50,50,0.15);
     border-radius: 8px;
+  }
+  .disabled {
+    filter: opacity(0.5)
   }
   .dice-wrapper {
     width: 63%;

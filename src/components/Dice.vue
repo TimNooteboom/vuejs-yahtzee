@@ -10,6 +10,7 @@
 
 <script setup>
   import { ref } from 'vue'
+  const emit = defineEmits(['selected'])
 
   const props = defineProps({
     dice: {
@@ -26,6 +27,7 @@
     } else {
       selected.value.push(index)
     }
+    emit('selected', selected.value)
   }
 </script>
 
