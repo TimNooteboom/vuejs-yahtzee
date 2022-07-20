@@ -47,7 +47,7 @@
     <div class="dice-wrapper">
       <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" :reset="reset" />
     </div>
-    <p id="total"></p>
+    <p class="total">{{total}}</p>
     <button :class="{disabled: disabled}" @click="roll">Roll the dice</button>
     <button :class="{disabled: rolls == 3 || !viewed}" @click="submit">Play</button>
   </div>
@@ -65,6 +65,7 @@
   let reset = ref(false)
   let values = ref(['','','','','',''])
   let currentValue = {}
+  let total = ref('')
 
   // when we are out of rolls, send 'disabled' to the dice component
   watch(rolls, (newValue) => {
@@ -94,7 +95,11 @@
   const submit = () => {
     values.value[currentValue.index] = currentValue.value
     if(!values.value.some((el) => el === '')) {
-      console.log('game over!!') // game is over. Reset Everything. Remove the dice from board
+      const totalScore = values.value.reduce((a,b) => a + b)
+      console.log('game over!!', totalScore) // game is over. Reset Everything. Remove the dice from board
+      total.value = `The game is over! Your score is ${totalScore}.`
+      values.value = []
+      // diceFace.value = []
     }
 
     console.log(values.value)
@@ -117,6 +122,7 @@
   const roll = () => {
     reset.value = false
     viewed.value = false
+    total.value = ''
     if(rolls.value === 0) return
     let dice = document.querySelectorAll(".dice-wrapper img")
     dice.forEach((die, index) => {
