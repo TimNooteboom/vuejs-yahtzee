@@ -3,10 +3,10 @@ cd yahtzee
 npm install
 npm run dev
 
-
 Dice from here: https://www.youtube.com/watch?v=6CMfZkLntX8
 
 TODO:
+board.value = Array(9).fill(null)
 Add :key to the v-for
 Show the roll number
 Build out the board
