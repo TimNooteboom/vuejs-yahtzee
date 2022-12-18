@@ -1,55 +1,56 @@
 <template>
   <div class="container">
     <div id="board">
-      <span class="section">
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/one.svg' 
         />
         <input @click="input(1)" class="ones" v-model="values[0]" />
-      </span>
-      <span class="section">
+      </div>
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/two.svg' 
         />
         <input @click=input(2) class="twos"  v-model="values[1]"/>
-      </span>
-      <span class="section">
+      </div>
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/three.svg' 
         />
         <input @click=input(3) class="threes"  v-model="values[2]"/>
-      </span>
-      <span class="section">
+      </div>
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/four.svg' 
         />
         <input @click=input(4) class="fours"  v-model="values[3]"/>
-      </span>
-      <span class="section">
+      </div>
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/five.svg' 
         />
         <input @click=input(5) class="fives"  v-model="values[4]"/>
-      </span>
-      <span class="section">
+      </div>
+      <div class="section">
         <img 
           draggable="false"
           src='../assets/dice/six.svg' 
         />
         <input @click=input(6) class="sixes"  v-model="values[5]"/>
-      </span>
+      </div>
     </div>
     <div class="dice-wrapper">
       <Dice @selected="selectedDice" :dice="diceFace" :disabled="disabled" :reset="reset" />
     </div>
     <p class="total">{{total}}</p>
     <button :class="{disabled: disabled}" @click="roll">Roll the dice</button>
-    <button :class="{disabled: rolls == 3 || !viewed}" @click="submit">Play</button>
+    <button :class="{disabled: currentRoll == 0 || !viewed}" @click="submit">Play</button>
+    <div v-if="currentRoll > 0">Roll number {{currentRoll}}</div>
   </div>
 </template>
 
@@ -59,17 +60,18 @@
 
   let diceFace = ref([])
   let selectedCopy = ref([])
-  let rolls = ref(3)
+  let currentRoll = ref(0)
+  let maxRolls = 3
   let disabled = ref(false)
   let viewed = ref(false)
   let reset = ref(false)
-  let values = ref(['','','','','',''])
+  let values = Array(6).fill(null)
   let currentValue = {}
   let total = ref('')
 
   // when we are out of rolls, send 'disabled' to the dice component
-  watch(rolls, (newValue) => {
-    if(newValue === 0) {
+  watch(currentRoll, (newValue) => {
+    if(newValue === maxRolls) {
       disabled.value = true
     }
   })
@@ -103,7 +105,7 @@
     }
 
     console.log(values.value)
-    rolls.value = 3
+    currentRoll.value = 1
     disabled.value = false
     selectedCopy.value = []
     reset.value = true
@@ -116,14 +118,14 @@
       }
     })
 
-    console.log('dice face: ', diceFace.value)
+    console.log('dice face: ', diceFace.value, currentRoll.value)
   }
 
   const roll = () => {
     reset.value = false
     viewed.value = false
     total.value = ''
-    if(rolls.value === 0) return
+    if(currentRoll.value === maxRolls) return
     let dice = document.querySelectorAll(".dice-wrapper img")
     dice.forEach((die, index) => {
       if(!selectedCopy.value.includes(index)) {
@@ -137,7 +139,7 @@
       })
       rollDice()
     }, 1000)
-    rolls.value--
+    currentRoll.value++
   }
   const selectedDice = (sel) => {
     selectedCopy.value = [...sel]
@@ -171,13 +173,15 @@
     flex-direction: column;
   }
   #board .section {
-    flex-direction: row;
-    width: 200px;
+    display: flex;
+    margin-bottom: 10px;
   }
   #board .section img {
     height: 50px;
+    margin-right: 10px;
   }
   #board .section input {
+    margin-top: 2px;
     height: 45px;
     width: 45px;
     padding: 5px;
