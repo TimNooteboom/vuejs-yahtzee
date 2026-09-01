@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="180" viewBox="0 0 600 180" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c68a44"/>
+      <stop offset="0.5" stop-color="#8a5220"/>
+      <stop offset="1" stop-color="#5a3216"/>
+    </linearGradient>
+    <!-- turn smooth stretched noise into thin dark grain LINES -->
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.11" numOctaves="5" seed="14" result="turb"/>
+      <!-- pull one noise channel into the alpha channel -->
+      <feColorMatrix in="turb" type="matrix"
+        values="0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                1 0 0 0 0" result="field"/>
+      <!-- slice the smooth field into repeating bands = grain lines -->
+      <feComponentTransfer in="field" result="lines">
+        <feFuncA type="table"
+          tableValues="0 0 0 0 0.85 0 0 0 0 0 0.9 0 0 0 0 0.8 0 0 0 0 0.95 0 0 0"/>
+      </feComponentTransfer>
+      <!-- ink the lines dark brown, keep only where the lines are -->
+      <feFlood flood-color="#2c1809" result="ink"/>
+      <feComposite in="ink" in2="lines" operator="in"/>
+    </filter>
+  </defs>
+  <rect width="600" height="180" fill="url(#base)"/>
+  <rect width="600" height="180" filter="url(#grain)"/>
+</svg>
