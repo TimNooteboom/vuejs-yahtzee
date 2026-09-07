@@ -19,11 +19,18 @@
             readonly
           />
         </div>
-        <div class="progress-container">
-          <div class="circular-progress" :style="progressStyle">
-            <span class="progress-value" :class="{ bonus: gotUpperBonus }">
-              {{ upperCatSum }}/{{ UPPER_SECTION_TARGET }}
-            </span>
+        <div class="section">
+          <div class="section-column">
+            <div>Section</div>
+            <div>Bonus</div>
+            <div>+35</div>
+          </div>
+          <div class="progress-container">
+            <div class="circular-progress" :style="progressStyle">
+              <span class="progress-value" :class="{ bonus: gotUpperBonus }">
+                {{ upperCatSum }}/{{ UPPER_SECTION_TARGET }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -388,6 +395,10 @@ h1 {
     input:not(:disabled) {
       cursor: pointer;
     }
+
+    .section-column {
+      margin-right: 5px;
+    }
   }
   .progress-container {
     .circular-progress {
@@ -395,8 +406,8 @@ h1 {
       align-items: center;
       justify-content: center;
       position: relative;
-      height: 50px;
-      width: 50px;
+      height: 45px;
+      width: 45px;
       border-radius: 50%;
       background: conic-gradient(
         #2a3ae8 calc(var(--deg) * 1deg),
@@ -407,8 +418,8 @@ h1 {
       &::before {
         content: "";
         position: absolute;
-        height: 40px;
-        width: 40px;
+        height: 38px;
+        width: 38px;
         border-radius: 50%;
         background-color: #fff;
       }
